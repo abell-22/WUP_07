@@ -1,7 +1,7 @@
 ---
 title: "covid 19"
-author: "Dr K"
-date: "5/2/2020"
+author: "Alex Bell"
+date: "03/29/2021"
 output:
   html_document: default
   pdf_document: default
@@ -24,11 +24,14 @@ state of a patient must be died or alive - we adjust that as well
   
 # Question 1 - Is dying independent of sex
 
-
+$H_O$: Covid 19 deaths in Korea, Jan-May 2020 are unrelated to sex
+$H_A$: There is a relation between deaths in Korea Jan-May 2020 and sex of the patient
 
 
 Table of patients:
 ```{r}
+kRdata$Sex = as.factor(kRdata$Sex)
+kRdata$result= as.factor(kRdata$result)
 
 # cross tabulation, patient state by gender
 
@@ -38,22 +41,46 @@ with(kRdata, table(Sex, result))
 
 ## We create two bar charts - one based on frequency and the other on percent, use ggplot commands to do this
 
-`
-
-  
-
+```{r}
+dd2 <- kRdata %>% group_by(result,Sex) %>% summarize(count=n()) %>% mutate(prcnt=count/sum(count))
 
 
+# the group_by followed by summarize(count=n())
 
+basicC <- ggplot(dd2,aes(x=result,y=count,fill=Sex))
+basicC + geom_bar(stat="identity",position="dodge")
 
-  
+#Now for percentage plot
+
+basicCC <- ggplot(dd2,aes(x=result,y=prcnt*100,fill=Sex)) 
+basicCC + geom_bar(stat="identity", position = "dodge")
+```
+
+The First graph shows that among the ones that survived it appears that there were more female survivors than male survivors. among the ones that did not survive it appears that there were alot more males that did not survive than females. 
+
+The second graph, looking at the percentages show that among the ones who survived and are alive there are more females that survived than males, and among the ones that died there were more males that died than females, so we can say that gender played a role.
+
 ## Numerical results
 
+```{r}
+table1 <- xtabs(~result + Sex, data=kRdata)
+rowPerc(table1)
+colPerc(table1)
+```
+
+In the orginal total dataset, in terms of percentages the males died was almost twice as great as females.
 
 ## Inferential results 
+
+```{r}
+chisq.test(table1)
+chisqtestGC(table1)
+fisher.test(table1)
+```
 
 
 
 
 ## Conclusions
 
+Because the P-Value is 0.001 and the odds of a male dying of Covid 19 are 2.3 to 1. We would also reject the Null hypothesis because the P-Value is 0.001 because the odds of a male dying are 2.3 times greater than that of a female and the confidence interval does not contain the number 1, and we have evidence that there is a difference that it is not 50/50.
