@@ -78,7 +78,9 @@ chisqtestGC(table1)
 fisher.test(table1)
 ```
 
+both chi-squared tests show a P-Value of 0.001 if the null hypothesis were true we would expect more female deaths 39 as oppsed to 25 and fewer male deaths 30 as opposed to 44. the P-Value of 0.001 means that we can reject the null hypothesis. If the null hypothesis were really true then the probability of getting the above results with this type of imbalance of deaths between males and females that would happen only by chance only one time by 1 and 1000.
 
+The Fisher Exact test shows the odds ratio is 2.3 to 1 and shows that if you were male you are 2.3 times more likely to die having been infected by Covid 19 than if you were female. The 95% confidence interval is somewhere between 1.4 times more likely up to 3.9 times.
 
 
 ## Conclusions
